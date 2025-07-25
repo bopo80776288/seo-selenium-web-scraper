@@ -110,10 +110,6 @@ python3 seo_selenium_scraper.py
 
 ---
 
-如有任何問題，歡迎提出！
-
----
-
 ## Reference
 
 https://webscraping.ai/faq/google-search-scraping/how-do-i-scrape-google-search-results-using-selenium
