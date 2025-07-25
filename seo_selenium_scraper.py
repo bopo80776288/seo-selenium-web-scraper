@@ -21,7 +21,6 @@ USER_AGENT = (
     "Chrome/114.0.0.0 Safari/537.36"
 )
 
-# --- Load keywords from CSV ---
 def load_keywords_from_csv(csv_path):
     keywords = []
     with open(csv_path, newline='', encoding='utf-8') as csvfile:
@@ -45,7 +44,6 @@ def load_keywords_from_csv(csv_path):
     print(f"[INFO] Loaded {len(keywords)} keywords from CSV: {keywords}")
     return keywords
 
-# --- Keywords to search ---
 KEYWORDS = load_keywords_from_csv('keywords.csv')
 
 # --- Selenium options ---
@@ -56,7 +54,6 @@ chrome_options.add_argument("--disable-blink-features=AutomationControlled")
 chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
 chrome_options.add_experimental_option('useAutomationExtension', False)
 
-# --- Main scraping logic ---
 def random_sleep(a=2, b=4):
     time.sleep(random.uniform(a, b))
 
@@ -88,9 +85,9 @@ def click_link_icon(driver):
 def get_aio_content(driver):
     scroll_page(driver, scroll_pause=1, scroll_count=5)
     click_show_more(driver)
-    click_link_icon(driver)  # Click the icon to reveal links
+    click_link_icon(driver)  
     soup = BeautifulSoup(driver.page_source, 'html.parser')
-    # Extract main AIO content
+
     aio_sections = soup.find_all('div', class_='WaaZC')
     aio_texts = []
     for section in aio_sections:
@@ -106,24 +103,22 @@ def get_aio_content(driver):
     print(f"[DEBUG] Found {len(aio_source_links)} AIO source links (KEVENd):")
     for link in aio_source_links:
         print(f"- {link['text']}: {link['href']}")
-    # Save the first AIO block and all AIO source links
+    
     if aio_texts:
         return {'text': '\n'.join(aio_texts), 'links': aio_source_links}
     return None
 
-# --- Save results as CSV ---
 def save_results_csv(results, csv_path):
     with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['關鍵字', 'AIO內容', '來源連結'])
         for keyword, data in results.items():
             text = data['text'] if data['text'] else ''
-            # Use newline to separate links for better Excel/Sheets display
+
             links = '\n'.join([l['href'] for l in data['links']]) if data['links'] else ''
             writer.writerow([keyword, text, links])
     print(f"[INFO] Results saved to {csv_path}")
 
-# --- Save domain analysis as CSV ---
 def save_domain_analysis_csv(results, csv_path):
     domain_counts_per_keyword = defaultdict(Counter)
     for keyword, data in results.items():
@@ -143,7 +138,7 @@ def generate_wordcloud(all_text):
     if not all_text.strip():
         print("[INFO] No AIO text to generate word cloud.")
         return
-    font_path = 'NotoSansMonoCJKtc-VF.otf'  # Use your downloaded font
+    font_path = 'NotoSansMonoCJKtc-VF.otf'  # Use downloaded font
     wc = WordCloud(font_path=font_path, width=800, height=400, background_color='white', collocations=False).generate(all_text)
     plt.figure(figsize=(12, 6))
     plt.imshow(wc, interpolation='bilinear')
