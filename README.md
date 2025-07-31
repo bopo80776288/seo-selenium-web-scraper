@@ -5,7 +5,7 @@
 請先安裝以下 Python 套件：
 
 ```bash
-pip3 install selenium beautifulsoup4 wordcloud matplotlib
+pip3 install -r requirements.txt
 ```
 
 > **注意：**
@@ -79,6 +79,12 @@ python3 seo_selenium_scraper.py
 
 - `full_page.html`：
   - 每次搜尋時暫存的 Google 搜尋結果原始碼，方便除錯與手動檢查。
+
+- **Google Sheets Export**：
+  - 自動將結果匯出至 Google Sheets，包含兩個工作表：
+    - "AIO Results"：主要爬蟲結果
+    - "Domain Analysis"：網域分析結果
+  - 詳見 `GOOGLE_SHEETS_SETUP.md` 設定指南
 
 ---
 
